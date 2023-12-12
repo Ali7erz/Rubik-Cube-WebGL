@@ -37,7 +37,7 @@ var isRotateing = false;
 
 var isAnimating = true;
 var toggleBack = false;
-const ANIMATION_SPEED = 5;
+const ANIMATION_SPEED = 10;
 
 var thetIncrement = ANIMATION_SPEED;
 var currentRotatingDegree = 0;
@@ -50,7 +50,7 @@ const OFFSET_INCREMENTER = 0.035;
 var offset_incrementer = -OFFSET_INCREMENTER;
 var offset_acc = -OFFSET_INCREMENTER / 10;
 
-var colorCenter;
+let shuffleList = [];
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -65,7 +65,6 @@ window.onload = function init() {
 
   // cube = new Cube(gl, program, x, y, z, 1);
   rubiksCube = new RubiksCube(gl, program);
-  colorCenter = rubiksCube.getColorCenter();
 
   canvas.addEventListener("mousedown", function (event) {
     dragging = true;
@@ -88,7 +87,7 @@ window.onload = function init() {
         if (cameraYrot >= 89) {
           twist(ALLUP, false);
           cameraYrot = 0;
-          toggleBack = true;
+          toggleBack = true; // To get the previous value of isAnimating.
         } else if (cameraYrot <= -89) {
           twist(ALLDOWN, false);
           cameraYrot = 0;
@@ -172,7 +171,6 @@ window.onload = function init() {
   };
   document.getElementById("reset").onclick = function () {
     rubiksCube = new RubiksCube(gl, program);
-    colorCenter = rubiksCube.getColorCenter();
   };
   document.getElementById("rotateRight").onclick = function () {
     console.log("roate right " + direction);
@@ -194,9 +192,17 @@ window.onload = function init() {
     console.log("roate front " + direction);
     twist(FRONT, isAnimating);
   };
-  document.getElementById("rotateBack").onclick = function () {
-    console.log("roate back " + direction);
-    twist(BACK, isAnimating);
+  document.getElementById("shufffle").onclick = function () {
+    console.log("shufffle " + direction);
+
+    for (let i = 0; i < 10; i++) {
+      let rot = Math.floor(Math.random() * 13);
+      shuffleList.push(rot);
+    }
+  };
+  document.getElementById("rotateFront").onclick = function () {
+    console.log("roate front " + direction);
+    twist(FRONT, isAnimating);
   };
   document.getElementById("animation").onclick = function () {
     console.log("animation " + isAnimating + " to " + !isAnimating);
@@ -230,6 +236,12 @@ function render() {
     thetIncrement = 90;
   } else {
     thetIncrement = ANIMATION_SPEED;
+  }
+
+  if (!isRotateing && !isExploding && shuffleList.length > 0) {
+    console.log(shuffleList);
+    direction = Math.floor(Math.random() * 1) - 1;
+    twist(shuffleList.shift(), isAnimating);
   }
 
   if (isRotateing) {
