@@ -1,8 +1,5 @@
 class Cube {
-  constructor(gl, program, x, y, z, size, id) {
-    this.gl = gl;
-    this.program = program;
-
+  constructor(x, y, z, size, id) {
     this.id = id;
     this.center = [x, y, z];
     this.size = size;

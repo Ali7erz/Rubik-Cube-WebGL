@@ -560,8 +560,6 @@ class RubiksCube {
           if (x == 0 && y == 0 && z == 0) continue;
           this.cubes.push(
             new Cube(
-              this.gl,
-              this.program,
               x / 3.0 + 0.01 * x,
               y / 3.0 + 0.01 * y,
               z / 3.0 + 0.01 * z,
