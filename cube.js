@@ -79,6 +79,18 @@ class Cube {
     for (let i = 0; i < this.points.length; i++) {
       this.points[i] = this.multMat4Vec4(rotateMatrix, this.points[i]);
     }
+
+    this.normals = [];
+    for (let i = 0; i < this.points.length; i += 3) {
+      let t1 = subtract(this.points[i + 1], this.points[i]);
+      let t2 = subtract(this.points[i + 2], this.points[i + 1]);
+      let normal = cross(t1, t2);
+      normal = vec3(normal);
+
+      for (let j = 0; j < 3; j++) {
+        this.normals.push(normal);
+      }
+    }
   }
 
   setOffset(offsetx, offsety, offsetz) {
